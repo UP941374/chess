@@ -1,7 +1,10 @@
 let fsize = 0;
+let whitecolor = '#ffffff';
+let blackcolor = '#b3b3b3';
 
 window.addEventListener('resize', onresize);
 window.addEventListener('load', newgame);
+document.getElementById('canv').addEventListener('click', movepiece);
 
 function drawboard(){
   let c = document.getElementById('canv');
@@ -19,7 +22,7 @@ function drawboard(){
   //draw board
   for (let i=0; i<boardsize; i++) {
       for (let j=0; j<boardsize; j++) {
-        ctx.fillStyle = ((i+j)%2==0) ? "white":"black";
+        ctx.fillStyle = ((i+j)%2==0) ? whitecolor:blackcolor;
         ctx.fillRect(j*fieldsize, i*fieldsize, fieldsize, fieldsize);
     };
   }
@@ -38,6 +41,10 @@ function drawpieces(){
       };
     }
   }
+};
+
+function movepiece(x){
+  console.log(x.clientY,x.clientX)
 };
 
 function getcordx(x){
