@@ -8,8 +8,8 @@ function drawboard(){
   let ctx = c.getContext("2d");
   ch = window.innerHeight;
   cw = window.innerWidth;
-  let bh = Math.floor(ch * 0.90);
-  let bw = Math.floor(cw * 0.90);
+  let bh = ch * 0.90;
+  let bw = cw * 0.90;
   c.width = bh;
   c.height = c.width;
   let boardsize = 8;
@@ -34,7 +34,6 @@ function drawpieces(){
       image.src = piece.img;
       image.id = piece.pos
       image.onload = function(piece){
-        console.log(this.id)
         ctx.drawImage(image,getcordx(this.id),getcordy(this.id),fsize,fsize); // Or at whatever offset you like
       };
     }
@@ -42,11 +41,13 @@ function drawpieces(){
 };
 
 function getcordx(x){
-  return (x[0].charCodeAt(0)-65)*Math.floor(fsize);
+  let res = (x[0].charCodeAt(0)-65)*Math.floor(fsize);
+  return res;
 }
 
 function getcordy(x){
-  return (x[1]-1)*Math.floor(fsize);
+  let res = (x[1]-1)*Math.floor(fsize);
+  return res;
 }
 
 function onresize(){
