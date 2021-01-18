@@ -7,6 +7,8 @@ window.addEventListener('resize', onresize);
 window.addEventListener('load', newgame);
 document.getElementById('canv').addEventListener('mousedown', pickpiece);
 document.getElementById('canv').addEventListener('mouseup', droppiece);
+document.getElementById('canv').addEventListener('touchstart', pickpiece);
+document.getElementById('canv').addEventListener('touchend', droppiece);
 
 function drawboard(){
   let c = document.getElementById('canv');
