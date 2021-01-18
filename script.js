@@ -1,4 +1,5 @@
 let fsize = 0;
+let boardsize = 8;
 let whitecolor = '#ffffff';
 let blackcolor = '#b3b3b3';
 
@@ -9,13 +10,25 @@ document.getElementById('canv').addEventListener('click', movepiece);
 function drawboard(){
   let c = document.getElementById('canv');
   let ctx = c.getContext("2d");
-  ch = window.innerHeight;
-  cw = window.innerWidth;
-  let bh = ch * 0.90;
-  let bw = cw * 0.90;
+
+  ch = window.innerHeight*0.95;
+  cw = window.innerWidth*0.95;
+
+  let bh = ch;
+  let bw = cw;
+
   c.width = bh;
   c.height = c.width;
-  let boardsize = 8;
+
+  if (ch > cw) {
+    console.log('pionowe')
+    c.height =  cw;
+    c.width = c.height;
+    bh = cw;
+
+  }
+
+
   let fieldsize = bh / boardsize;
   fsize = fieldsize;
 
