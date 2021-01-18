@@ -1,14 +1,14 @@
 let fsize = 0;
-let boardsize = 8;
-let whitecolor = '#ffffff';
-let blackcolor = '#b3b3b3';
+const boardsize = 8;
+const whitecolor = '#ffffff';
+const blackcolor = '#b3b3b3';
+const selected = -50;
 
 window.addEventListener('resize', onresize);
 window.addEventListener('load', newgame);
-document.getElementById('canv').addEventListener('mousedown', pickpiece);
-document.getElementById('canv').addEventListener('mouseup', droppiece);
-document.getElementById('canv').addEventListener('touchstart', pickpiece);
-document.getElementById('canv').addEventListener('touchend', droppiece);
+//document.getElementById('canv').addEventListener('mousedown', pickpiece);
+//document.getElementById('canv').addEventListener('mouseup', droppiece);
+document.getElementById('canv').addEventListener('click', movepiece);
 
 function drawboard(){
   let c = document.getElementById('canv');
@@ -43,9 +43,15 @@ function drawpieces(x){
       let image = new Image();
       image.src = piece.img;
       image.id = piece.pos
-      image.onload = function(piece){
-        ctx.drawImage(image,getcordx(this.id),getcordy(this.id),fsize,fsize);
-      };
+      if (!piece.moving) {
+        image.onload = function(piece){
+          ctx.drawImage(image,getcordx(this.id),getcordy(this.id),fsize,fsize);
+        }
+      } else {
+        image.onload = function(piece){
+          ctx.drawImage(image,getcordx(this.id)-selected/2,getcordy(this.id)-selected/2,fsize+selected,fsize+selected); //when selected
+        }
+      }
     }
   }
 };
@@ -61,6 +67,7 @@ function pickpiece(x){
       piece.moving = true;
     }
   }
+  redraw();
 };
 
 function droppiece(x){
@@ -81,9 +88,54 @@ function droppiece(x){
   redraw();
 };
 
+function movepiece(x){
+  let moved = false;
+  let c = document.getElementById('canv');
+  ch = c.height;
+  cw = c.width;
+  let posx = Math.round(x.clientX - ((window.innerWidth - c.width) / 2));
+  let posy = Math.round(x.clientY-10);
+
+  for (var piece of pieces) {
+    if (piece.moving) {
+      if (legalmove(piece, piece.pos, tocord(posx,posy))) {
+        piece.pos = tocord(posx,posy)
+        piece.moving = false;
+        moved = true;
+      }
+    }
+  }
+
+  for (var piece of pieces) {
+    piece.moving = false;
+  };
+
+  if (moved == false) {
+    for (let piece of pieces) {
+      if (piece.pos == tocord(posx,posy)) {
+        piece.moving = true;
+      }
+    }
+  }
+ redraw()
+};
+
+
 function legalmove(p,o,n){
+  let move = true;
   console.log(p.type +':'+ o + '->'+n)
-  return true;
+
+  if (o==n){ //same field
+    move = false;
+  }
+
+for (var piece of pieces) {
+  if (n == piece.pos && p.color == piece.color) {
+    move = false;
+  }
+}
+
+  return move;
 }
 
 function tocord(x,y){
